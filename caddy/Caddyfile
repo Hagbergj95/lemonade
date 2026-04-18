@@ -1,0 +1,21 @@
+{
+	auto_https off
+	admin off
+}
+
+:{$CADDY_HTTP_PORT} {
+	log {
+		output stdout
+		format console
+	}
+
+	encode zstd gzip
+
+	handle_path /litellm/* {
+		reverse_proxy {$LITELLM_UPSTREAM}
+	}
+
+	handle {
+		reverse_proxy {$LEMONADE_UPSTREAM}
+	}
+}

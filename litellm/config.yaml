@@ -1,0 +1,36 @@
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+
+litellm_settings:
+  drop_params: true
+
+model_list:
+  - model_name: coding
+    litellm_params:
+      model: openai/Qwen3-Coder-Next-GGUF
+      api_base: os.environ/LEMONADE_API_BASE
+      api_key: os.environ/LEMONADE_API_KEY
+
+  - model_name: gemma4-general
+    litellm_params:
+      model: openai/user.Gemma-4-31B-it-abliterated-Q4_K_M
+      api_base: os.environ/LEMONADE_API_BASE
+      api_key: os.environ/LEMONADE_API_KEY
+
+  - model_name: qwen-chatbot-fast
+    litellm_params:
+      model: openai/user.Qwen3.6-35B-A3B-Abliterated-Heretic-GGUF-Q4_K_M
+      api_base: os.environ/LEMONADE_API_BASE
+      api_key: os.environ/LEMONADE_API_KEY
+
+  - model_name: qwen-chatbot-think
+    litellm_params:
+      model: openai/user.Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive-Q6_K_P
+      api_base: os.environ/LEMONADE_API_BASE
+      api_key: os.environ/LEMONADE_API_KEY
+
+  - model_name: qwen-deep
+    litellm_params:
+      model: openai/user.Qwen3.5-122B-A10B-GGUF-UD-Q4_K_XL
+      api_base: os.environ/LEMONADE_API_BASE
+      api_key: os.environ/LEMONADE_API_KEY
