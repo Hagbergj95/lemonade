@@ -102,6 +102,7 @@ Use the same OpenAI-compatible base URL:
 
 - `coding`
 - `gemma4-general`
+- `phi4-npu`
 - `qwen-chatbot-fast`
 - `qwen-chatbot-think`
 - `qwen-deep`
@@ -109,11 +110,20 @@ Use the same OpenAI-compatible base URL:
 These aliases route back to the native Lemonade OpenAI-compatible API, so your local Lemonade models are available through LiteLLM with cleaner names.
 
 - `gemma4-general` - Gemma 4 31B general-purpose profile
+- `phi4-npu` - FLM-served Phi 4 Mini Instruct model on the host NPU
 - `qwen-chatbot-fast` - Qwen 35B general-purpose profile for lower latency
 - `qwen-chatbot-think` - Qwen 35B chatbot profile backed by the HauhauCS aggressive Q6 model
 - `qwen-deep` - Qwen 122B general-purpose profile for heavier reasoning
 
 If you want different upstream models or alias names, edit `litellm/config.yaml`.
+
+For the FLM-backed alias, the default assumption is:
+
+```text
+PHI4_NPU_API_BASE=http://127.0.0.1:52625/v1
+```
+
+If your FLM server expects a different request model name than `phi4-mini-it:4b`, update the `phi4-npu` entry in `litellm/config.yaml` to match the model ID returned by the FLM `/v1/models` endpoint.
 
 ## Operations
 
