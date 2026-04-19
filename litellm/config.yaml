@@ -17,6 +17,12 @@ model_list:
       api_base: os.environ/LEMONADE_API_BASE
       api_key: os.environ/LEMONADE_API_KEY
 
+  - model_name: gemma4-E4B
+    litellm_params:
+      model: openai/user.gemma-4-E4B-it-OBLITERATED-Q8_0
+      api_base: os.environ/LEMONADE_API_BASE
+      api_key: os.environ/LEMONADE_API_KEY
+
   - model_name: qwen-chatbot-fast
     litellm_params:
       model: openai/user.Qwen3.6-35B-A3B-Abliterated-Heretic-GGUF-Q4_K_M
