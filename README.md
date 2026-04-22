@@ -1,11 +1,12 @@
 # local-llm
 
-Containerized Caddy + LiteLLM in front of an existing native Lemonade host service.
+Containerized Caddy + LiteLLM in front of an existing native Lemonade host service, with an optional vLLM ROCm backend managed by the same Compose stack.
 
 ## Implemented topology
 
 - **Tailscale Serve/Funnel** keeps terminating HTTPS on `:443`
 - **Caddy** runs in Docker with **host networking** on `127.0.0.1:8000`
+- **vLLM** can run in Docker with **host networking** on `127.0.0.1:30000`
 - **LiteLLM** runs in Docker with **host networking** on `127.0.0.1:4000`
 - **Native Lemonade** stays on the host and is proxied through Caddy
 
@@ -30,7 +31,7 @@ https://lemonade.tailc224aa.ts.net/litellm/v1
 
 ## Files
 
-- `docker-compose.yml` - Caddy + LiteLLM stack
+- `docker-compose.yml` - Caddy + LiteLLM + optional vLLM stack
 - `caddy/Caddyfile` - path-based reverse proxy
 - `litellm/config.yaml` - model aliases and auth
 - `.env.example` - deployment variables
@@ -50,13 +51,15 @@ https://lemonade.tailc224aa.ts.net/litellm/v1
    LEMONADE_API_KEY=none
    ```
 
-3. Start the stack:
+3. If you are replacing a standalone `docker run` vLLM process, stop that container first so Compose can bind port `30000`.
+
+4. Start the stack:
 
    ```bash
    docker compose up -d
    ```
 
-4. Confirm Tailscale still points at Caddy on `localhost:8000`:
+5. Confirm Tailscale still points at Caddy on `localhost:8000`:
 
    ```bash
    tailscale serve status
@@ -71,7 +74,7 @@ tailscale serve funnel 443 http://localhost:8000
 ## Rollout
 
 1. Leave the native Lemonade service running on `127.0.0.1:13305`.
-2. Bring up LiteLLM and Caddy with Docker Compose.
+2. Bring up vLLM, LiteLLM, and Caddy with Docker Compose.
 3. This stack uses **host networking** so the containers can reach host-only services bound to `127.0.0.1`.
 4. Test the LiteLLM path first:
 
@@ -80,7 +83,13 @@ tailscale serve funnel 443 http://localhost:8000
      https://lemonade.tailc224aa.ts.net/litellm/v1/models
    ```
 
-5. After `/litellm/v1` works, point Continue, autonomous agents, and mobile clients at that base URL.
+5. If you are using the direct vLLM-backed alias, verify the vLLM server is up:
+
+   ```bash
+   curl http://127.0.0.1:30000/v1/models
+   ```
+
+6. After `/litellm/v1` works, point Continue, autonomous agents, and mobile clients at that base URL.
 
 ## Client configuration
 
@@ -127,7 +136,7 @@ If your FLM server expects a different request model name than `phi4-mini-it:4b`
 
 ## Operations
 
-- **Logs:** `docker compose logs -f caddy litellm`
+- **Logs:** `docker compose logs -f caddy litellm vllm`
 - **Updates:** `docker compose pull && docker compose up -d`
 - **Secrets:** keep real credentials only in `.env`
 - **Backups:** preserve `.env`, `litellm/config.yaml`, and the Docker volumes `caddy-data` / `caddy-config`
