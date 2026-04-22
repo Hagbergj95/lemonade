@@ -5,12 +5,49 @@ litellm_settings:
   drop_params: true
 
 model_list:
+  - model_name: gemma4-general
+    litellm_params:
+      model: openai/user.Gemma-4-31B-it-abliterated-Q4_K_M
+      api_base: os.environ/LEMONADE_API_BASE
+      api_key: os.environ/LEMONADE_API_KEY
+
   - model_name: gemma4-E4B
     litellm_params:
       model: openai/user.gemma-4-E4B-it-OBLITERATED-Q8_0
       api_base: os.environ/LEMONADE_API_BASE
       api_key: os.environ/LEMONADE_API_KEY
 
+  # ⚡ ROUTE A: Instruct/Fast Mode
+  - model_name: qwen3.6-fast
+    litellm_params:
+      model: openai/user.Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive-Q6_K_P
+      api_base: os.environ/LEMONADE_API_BASE
+      api_key: os.environ/LEMONADE_API_KEY
+      temperature: 0.7
+      top_p: 0.8
+      top_k: 20
+      min_p: 0.0
+      presence_penalty: 1.5
+      repetition_penalty: 1.0
+      extra_body:
+        chat_template_kwargs:
+          enable_thinking: false
+
+  # 🧠 ROUTE B: Thinking/Deep Mode
+  - model_name: qwen3.6-think
+    litellm_params:
+      model: openai/user.Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive-Q6_K_P
+      api_base: os.environ/LEMONADE_API_BASE
+      api_key: os.environ/LEMONADE_API_KEY
+      temperature: 1.0
+      top_p: 0.95
+      top_k: 20
+      min_p: 0.0
+      presence_penalty: 1.5
+      repetition_penalty: 1.0
+      extra_body:
+        chat_template_kwargs:
+          enable_thinking: true
 
   - model_name: GLM4-7-fast
     litellm_params:
@@ -24,7 +61,6 @@ model_list:
         chat_template_kwargs:
           enable_thinking: false
 
-
   - model_name: GLM4-7-think
     litellm_params:
       model: openai/user.GLM-4.7-Flash-GGUF-UD-Q6_K_XL
@@ -37,6 +73,11 @@ model_list:
         chat_template_kwargs:
           enable_thinking: true
 
+  - model_name: Gemma4-npu
+    litellm_params:
+      model: openai/gemma4-it-e2b-FLM
+      api_base: os.environ/PHI4_NPU_API_BASE
+      api_key: os.environ/PHI4_NPU_API_KEY
 
   - model_name: qwen-35b-fast
     litellm_params:
